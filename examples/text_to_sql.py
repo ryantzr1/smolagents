@@ -69,11 +69,12 @@ def sql_engine(query: str) -> str:
     return output
 
 
-from smolagents import CodeAgent, HfApiModel
+from smolagents import CodeAgent, HfApiModel, TransformersModel
 
 
 agent = CodeAgent(
     tools=[sql_engine],
-    model=HfApiModel("meta-llama/Meta-Llama-3.1-8B-Instruct"),
+    # model=HfApiModel("meta-llama/Meta-Llama-3.1-8B-Instruct"),
+     model=TransformersModel(),
 )
 agent.run("Can you give me the name of the client who got the most expensive receipt?")
