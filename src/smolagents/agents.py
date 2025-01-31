@@ -679,12 +679,20 @@ class ToolCallingAgent(MultiStepAgent):
         memory_step.model_input_messages = memory_messages.copy()
 
         try:
+            print(f"Tools to call from: {list(self.tools.values())}")
+            for tool in self.tools.values():
+                print(f"Tool name: {tool.name}, Tool description: {tool.description}")
             model_message: ChatMessage = self.model(
                 memory_messages,
                 tools_to_call_from=list(self.tools.values()),
                 stop_sequences=["Observation:"],
             )
+<<<<<<< Updated upstream
             memory_step.model_output_message = model_message
+=======
+            print(model_message)
+            log_entry.model_output_message = model_message
+>>>>>>> Stashed changes
             if model_message.tool_calls is None or len(model_message.tool_calls) == 0:
                 raise Exception("Model did not call any tools. Call `final_answer` tool to return a final answer.")
             tool_call = model_message.tool_calls[0]

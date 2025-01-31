@@ -21,6 +21,7 @@ dependencies = [
   "markdownify>=0.14.1",
   "duckduckgo-search>=6.3.7",
   "python-dotenv"
+  "llama-cpp-python>=0.2.0"
 ]
 
 [project.optional-dependencies]
@@ -76,6 +77,7 @@ test = [
 dev = [
   "smolagents[quality,test]",
   "sqlalchemy", # for ./examples
+  "llama-cpp-python>=0.2.0"
 ]
 
 [tool.pytest.ini_options]
