@@ -32,8 +32,8 @@ elif chosen_inference == "litellm":
 elif chosen_inference == "llama_cpp":
     model = LlamaCppModel(
         repo_id="unsloth/DeepSeek-R1-Distill-Qwen-1.5B-GGUF",
-	    filename="DeepSeek-R1-Distill-Qwen-1.5B-Q2_K.gguf",
-        n_ctx=8192,        # Explicitly set context window
+        filename="DeepSeek-R1-Distill-Qwen-1.5B-Q2_K.gguf",
+        n_ctx=8192,
     )
 
 @tool
@@ -49,10 +49,8 @@ def get_weather(location: str, celsius: Optional[bool] = False) -> str:
     return "The weather is UNGODLY with torrential rains and temperatures below -10°C"
 
 
-# agent = ToolCallingAgent(model=model, tools=[get_weather], max_steps=1)
+agent = ToolCallingAgent(model=model, tools=[get_weather], max_steps=1)
+print("ToolCallingAgent:", agent.run("What's the weather like in Paris?"))
 
-# print("ToolCallingAgent:", agent.run("What's the weather like in Paris?"))
-
-# This works with codeAgent but not ToolCallingAgent somehow
 agent = CodeAgent(model=model, tools=[get_weather])
 print("CodeAgent:", agent.run("What's the weather like in Paris?"))

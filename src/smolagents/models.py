@@ -410,7 +410,6 @@ class HfApiModel(Model):
             return parse_tool_args_if_needed(message)
         return message
 
-from llama_cpp import Llama, LlamaGrammar
 
 class LlamaCppModel(Model):
     """
@@ -460,7 +459,7 @@ class LlamaCppModel(Model):
     "The client with the most expensive receipt is Jane Doe."
     ```
     """
-    
+
     def __init__(
         self,
         model_path: Optional[str] = None,
@@ -481,10 +480,11 @@ class LlamaCppModel(Model):
             n_gpu_layers (int, default=0): Number of GPU layers to use.
             n_ctx (int, default=8192): Context size for the model.
             **kwargs: Additional keyword arguments.
-        
         Raises:
             ValueError: If neither model_path nor repo_id+filename are provided.
         """
+        from llama_cpp import Llama
+
         super().__init__(**kwargs)
         self.max_tokens = max_tokens
 
@@ -520,6 +520,7 @@ class LlamaCppModel(Model):
         """
         Generates a response from the llama.cpp model and integrates tool usage *only if tools are provided*.
         """
+        from llama_cpp import LlamaGrammar
         try:
             completion_kwargs = self._prepare_completion_kwargs(
                 messages=messages,
@@ -529,7 +530,7 @@ class LlamaCppModel(Model):
                 flatten_messages_as_text=True,
                 **kwargs
             )
-         
+
             if not tools_to_call_from:
                 completion_kwargs.pop("tools", None)
                 completion_kwargs.pop("tool_choice", None)
@@ -557,11 +558,10 @@ class LlamaCppModel(Model):
             )
 
             content = response["choices"][0]["message"]["content"]
-            
             if stop_sequences:
                 content = remove_stop_sequences(content, stop_sequences)
 
-            message = ChatMessage(role="assistant", content=content) 
+            message = ChatMessage(role="assistant", content=content)
 
             if tools_to_call_from:
                 message = parse_tool_args_if_needed(message)
@@ -574,7 +574,6 @@ class LlamaCppModel(Model):
                 self.last_output_token_count = 0
 
             return message
-        
         except Exception as e:
             logger.error(f"Model error: {e}")
             return ChatMessage(role="assistant", content=f"Error: {str(e)}")
